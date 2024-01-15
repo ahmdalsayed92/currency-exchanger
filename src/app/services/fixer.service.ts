@@ -9,11 +9,15 @@ export class FixerService {
   constructor(private http: HttpClient) {}
 
   API_ACCESS_KEY = '88f7b7d9fa57694d26036ed7a0a626bc';
-  BASE_URL = `http://data.fixer.io/api/latest?access_key=${this.API_ACCESS_KEY}`;
+  BASE_URL = `http://data.fixer.io/api/`;
 
   getCurrencies() {
-    return this.http.get(this.BASE_URL).pipe(map((i:any)=>  i.rates
-   
-    ));
+    const url = `${this.BASE_URL}latest?access_key=${this.API_ACCESS_KEY}`;
+    return this.http.get(url).pipe(map((i: any) => i.rates));
+  }
+
+  getSympols() {
+    const url = `${this.BASE_URL}symbols?access_key=${this.API_ACCESS_KEY}`;
+    return this.http.get(url).pipe(map((i: any) => i.symbols));
   }
 }

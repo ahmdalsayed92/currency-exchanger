@@ -6,17 +6,18 @@
     <div class="form-group">
         <label for="from">From:</label>
         <select name="from" id="from" formControlName="from">
-            <option>select</option>
+
             @for (item of currencies; track item) {
                 <option [value]="item" >{{item}}</option>
             }
             
         </select>
     </div>
+    <button (click)="swap()">swap</button>
     <div class="form-group">
         <label for="to">To:</label>
         <select name="to" id="to" formControlName="to">
-            <option>select</option>
+
             @for (item of currencies; track item) {
                 <option [value]="item" >{{item}}</option>
             }
@@ -24,7 +25,9 @@
         </select>
     </div>
 
-    <button (click)="convert()">convert</button>
-    <button>details</button>
+    <button (click)="convert()" [disabled]="form.invalid">convert</button>
+    <button *ngIf="!details" (click)="navToDetails()">details</button>
+    <button *ngIf="details" [routerLink]="['/home']">back</button>
+
     <h2>result: {{result}}</h2>
 </form>
