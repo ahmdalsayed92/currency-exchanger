@@ -1,6 +1,6 @@
-<app-exchanger></app-exchanger>
+<app-exchanger (resultInfo)="handleCardsData($event)"></app-exchanger>
 <ul>
-    @for (item of currenciesList; track item) {
-        <app-card [data]=""></app-card>
+    @for (item of cardsDataList; track item) {
+        <app-card [data]="item"></app-card>
     }
 </ul>

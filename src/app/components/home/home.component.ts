@@ -10,15 +10,8 @@ import { CardComponent } from '../card/card.component';
   imports: [ExchangerComponent, CardComponent],
 })
 export class HomeComponent {
-  currenciesList = [
-    'USD',
-    'EUR',
-    'SAR',
-    'AED',
-    'EGP',
-    'GBP',
-    'JPY',
-    'KWD',
-    'QAR',
-  ];
+  cardsDataList?: any;
+  handleCardsData(data: any) {
+    this.cardsDataList = data;
+  }
 }

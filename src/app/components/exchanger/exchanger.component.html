@@ -1,33 +1,48 @@
-<form [formGroup]="form">
+<div class="exchanger">
+  <form [formGroup]="form">
     <div class="form-group">
-        <label for="amount">Amount:</label>
-    <input type="text" id="amount" formControlName="amount">
+      <label for="amount">Amount:</label>
+      <input
+        type="text"
+        id="amount"
+        formControlName="amount"
+        class="form-control"
+        placeholder="enter amount here"
+      />
     </div>
-    <div class="form-group">
+    <div class="currency-select">
+      <div class="form-group">
         <label for="from">From:</label>
-        <select name="from" id="from" formControlName="from">
-
-            @for (item of currencies; track item) {
-                <option [value]="item" >{{item}}</option>
-            }
-            
+        <select
+          name="from"
+          id="from"
+          formControlName="from"
+          class="form-control"
+        >
+          @for (item of currencies; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
         </select>
-    </div>
-    <button (click)="swap()">swap</button>
-    <div class="form-group">
+      </div>
+      <button (click)="swap()" *ngIf="!details">swap</button>
+      <div class="form-group">
         <label for="to">To:</label>
-        <select name="to" id="to" formControlName="to">
-
-            @for (item of currencies; track item) {
-                <option [value]="item" >{{item}}</option>
-            }
-            
+        <select name="to" id="to" formControlName="to" class="form-control">
+          @for (item of currencies; track item) {
+          <option [value]="item">{{ item }}</option>
+          }
         </select>
+      </div>
     </div>
 
-    <button (click)="convert()" [disabled]="form.invalid">convert</button>
-    <button *ngIf="!details" (click)="navToDetails()">details</button>
-    <button *ngIf="details" [routerLink]="['/home']">back</button>
+    <div class="action-buttons">
+      <button (click)="convert()" [disabled]="form.invalid">convert</button>
+      <button *ngIf="!details" (click)="navToDetails()">details</button>
+      <button *ngIf="details" [routerLink]="['/home']">back</button>
+    </div>
 
-    <h2>result: {{result}}</h2>
-</form>
+    <h2>
+      Result: <span>{{ result }}</span> {{ form.controls.to.value }}
+    </h2>
+  </form>
+</div>

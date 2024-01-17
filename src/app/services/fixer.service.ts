@@ -20,4 +20,9 @@ export class FixerService {
     const url = `${this.BASE_URL}symbols?access_key=${this.API_ACCESS_KEY}`;
     return this.http.get(url).pipe(map((i: any) => i.symbols));
   }
+
+  getHistoricalRates(date: string, to: string) {
+    const url = `${this.BASE_URL}${date}?access_key=${this.API_ACCESS_KEY}`;
+    return this.http.get(url).pipe(map((i: any) => i.rates[to]));
+  }
 }

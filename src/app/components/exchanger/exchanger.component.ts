@@ -14,7 +14,12 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { NavigationExtras, Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharedService } from '../../services/shared.service';
 
@@ -30,6 +35,7 @@ export class ExchangerComponent implements OnInit, OnChanges {
   constructor(
     private fixerService: FixerService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private sharedService: SharedService
   ) {}
 
@@ -40,7 +46,18 @@ export class ExchangerComponent implements OnInit, OnChanges {
   rates?: any;
   currencies?: Array<string>;
   result?: any;
-
+  mostPopularCurrenciesList = [
+    'USD',
+    'EUR',
+    'SAR',
+    'AED',
+    'EGP',
+    'GBP',
+    'JPY',
+    'KWD',
+    'QAR',
+  ];
+  mostPopularCurrenciesData: any = [];
   form = new FormGroup({
     amount: new FormControl('', [
       Validators.pattern(/^\d+$/),
@@ -72,9 +89,14 @@ export class ExchangerComponent implements OnInit, OnChanges {
     }
   }
   getFixer() {
-    this.fixerService.getCurrencies().subscribe((data) => {
-      this.rates = data;
-      this.currencies = Object.keys(data);
+    this.fixerService.getCurrencies().subscribe({
+      next: (data) => {
+        this.rates = data;
+        this.currencies = Object.keys(data);
+      },
+      error: (error) => {
+        console.error('Error fetching currencies:', error);
+      },
     });
   }
 
@@ -98,7 +120,21 @@ export class ExchangerComponent implements OnInit, OnChanges {
     const from: any = this.form.get('from')?.value;
     const to: any = this.form.get('to')?.value;
     const amount: any = this.form.get('amount')?.value;
-    this.result = (this.rates[to] / this.rates[from]) * amount;
+    this.result = ((this.rates[to] / this.rates[from]) * amount).toFixed(2);
+    this.convertMostPopular(from, amount);
+  }
+
+  convertMostPopular(from: any, amount: any) {
+    this.mostPopularCurrenciesData = [];
+    this.mostPopularCurrenciesList.map((curr) => {
+      this.mostPopularCurrenciesData.push({
+        from,
+        to: curr,
+        amount,
+        result: ((this.rates[curr] / this.rates[from]) * amount).toFixed(2),
+      });
+    });
+    this.resultInfo.emit(this.mostPopularCurrenciesData);
   }
 
   swap() {
